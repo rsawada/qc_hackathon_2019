@@ -21,7 +21,7 @@ random_seed = 0
 np.random.seed(random_seed)
 
 #### Preprare teacher data
-state_train = list()
+input_train = list()
 value_train = list()
 with open('Training.data', 'rb') as f:
     data = pickle.load(f)
@@ -29,34 +29,13 @@ with open('Training.data', 'rb') as f:
 state = QuantumState(nqubit)
 
 for d in data:
-    state.load(d[0])
-    state_train.append(state)
+    input_train.append(d[0])
     value_train.append(d[1])
 
 ## Basic gates
 I_mat = np.eye(2, dtype=complex)
 X_mat = X(0).get_matrix()
 Z_mat = Z(0).get_matrix()
-
-## fullsize gate
-def make_fullgate(list_SiteAndOperator, nqubit):
-    '''
-    Making a (2**nqubit, 2**nqubit) matrix
-    from list_SiteAndOperator = [ [i_0, O_0], [i_1, O_1], ...],
-    and inserting Identity, resulting
-    I(0) * ... * O_0(i_0) * ... * O_1(i_1) ...
-    '''
-    list_Site = [SiteAndOperator[0] for SiteAndOperator in list_SiteAndOperator]
-    list_SingleGates = [] ## 1-qubit gate array, reduced by np.kron
-    cnt = 0
-    for i in range(nqubit):
-        if (i in list_Site):
-            list_SingleGates.append( list_SiteAndOperator[cnt][1] )
-            cnt += 1
-        else: ## Put an identity if nothing at the site
-            list_SingleGates.append(I_mat)
-
-    return reduce(np.kron, list_SingleGates)
 
 
 # Construct an output gate U_out and initialization.
@@ -73,6 +52,20 @@ for d in range(c_depth):
 # Take the initial theta
 parameter_count = U_out.get_parameter_count()
 theta_init = [U_out.get_parameter(ind) for ind in range(parameter_count)]
+
+
+# Function to encode x
+def U_in(x):
+    U = QuantumCircuit(nqubit)
+
+    angle_y = np.arcsin(x)
+    angle_z = np.arccos(x**2)
+
+    for i in range(nqubit):
+        U.add_RY_gate(i, angle_y)
+        U.add_RZ_gate(i, angle_z)
+
+    return U
 
 # Function to update theta
 def set_U_out(theta):
@@ -104,11 +97,14 @@ def cost_func(theta):
     theta: c_depth * nqubit * 3 ndarray
     '''
     # Update theta in U_out
-#     global U_out
     set_U_out(theta)
 
     # num_x_train
-    value_pred = [qcl_pred(x, U_out) for x in state_train]
+    value_pred = list()
+    for x in input_train:
+        state.set_zero_state() # U_in|000>
+        U_in(x).update_quantum_state(state)
+        value_pred.append(qcl_pred(state, U_out))
 
     # quadratic loss
     #L = ((value_pred - value_train)**2).mean()
