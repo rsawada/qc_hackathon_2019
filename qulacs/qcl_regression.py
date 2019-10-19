@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 from functools import reduce
 import pickle
 from scipy.optimize import minimize
@@ -132,7 +133,10 @@ X = list()
 set_U_out(theta_opt)
 
 for i in range(n_data):
-    state.set_Haar_random_state()
+    #state.set_Haar_random_state()
+    x = random.random()
+    state.set_zero_state() # U_in|000>
+    U_in(x).update_quantum_state(state)
     X.append(qcl_pred(state, U_out))
 plt.hist(X, bins=100)
 plt.show()
