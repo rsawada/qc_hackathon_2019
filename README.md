@@ -11,16 +11,21 @@ In this example, [qulacs](http://qulacs.org) is used.
 Participants may use [qiskit](https://qiskit.org) instead by modifying the example code.
 Both qiskit and qulacs can be installed using pip.
 
+##
+I recommend to use python 3.6, which can be installed to CentOS7 or similar by
+```
+# yum install python36
+```
+with root account.
+
 
 ## Making and activating a virutalenv.
-```
-$ virtualenv hackathon_2019
-```
-
 If you need to specify a path to the python command.
 ```
 $ virtualenv hackathon_2019 -p /usr/bin/python3.6
 ```
+You may ommit -p option, if you want/need to use the /usr/bin/python.
+If you don't find the virtualenv command, you may need to install python-virtualenv package.
 
 Then activate the virtualenv.
 ```
