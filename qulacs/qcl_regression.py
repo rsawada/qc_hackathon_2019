@@ -132,12 +132,15 @@ X = list()
 # Put the optimized theta to U_out
 set_U_out(theta_opt)
 
+input_value = list()
 for i in range(n_data):
     #state.set_Haar_random_state()
     x = random.random()
+    input_value.append(x)
     state.set_zero_state() # U_in|000>
     U_in(x).update_quantum_state(state)
     X.append(qcl_pred(state, U_out))
-plt.hist(X, bins=100)
+
+plt.plot(input_value, X, 'o', color='black')
 plt.show()
 plt.savefig('qcl_regression.png')

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from qulacs import Observable, QuantumCircuit, QuantumState
 from qulacs.gate import Y,CNOT,merge
 import pickle
@@ -33,6 +34,8 @@ observable.add_operator(2.0, "X 2 Y 1 Z 0")
 observable.add_operator(-3.0, "Z 2")
 
 data = list()
+x_value = list()
+y_value = list()
 
 for i in range(n_data):
     #state.set_Haar_random_state()
@@ -44,7 +47,12 @@ for i in range(n_data):
     value = observable.get_expectation_value(state)
 #    data.append((state_vec, value))
     data.append((x, value))
+    x_value.append(x)
+    y_value.append(value)
 
 with open('Training.data', 'wb') as f:
     pickle.dump(data, f)
 
+plt.plot(x_value, y_value, 'o', color='black')
+plt.show()
+plt.savefig('qcl_training.png')
