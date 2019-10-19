@@ -6,7 +6,7 @@ import pickle
 from scipy.optimize import minimize
 from sklearn.metrics import mean_squared_error
 from qulacs import QuantumState, QuantumCircuit
-from qulacs.gate import X, Z
+from qulacs.gate import X, Z, Measurement
 from qulacs import ParametricQuantumCircuit
 from qulacs import Observable
 
@@ -49,6 +49,12 @@ for d in range(c_depth):
         U_out.add_parametric_RZ_gate(i,angle)
         angle = 2.0 * np.pi * np.random.rand()
         U_out.add_parametric_RX_gate(i,angle)
+    meas0 = Measurement(0, 0)
+    U_out.add_gate(meas0)
+    meas1 = Measurement(1, 1)
+    U_out.add_gate(meas1)
+    meas2 = Measurement(2, 2)
+    U_out.add_gate(meas2)
 
 # Take the initial theta
 parameter_count = U_out.get_parameter_count()
@@ -79,7 +85,9 @@ def set_U_out(theta):
 
 # Construct an observable gate
 obs = Observable(nqubit)
-obs.add_operator(2.,'Z 0') # Add an operator 2*Z. This number should be optimised.
+obs.add_operator(1, "Z 0")
+obs.add_operator(2, "Z 1")
+obs.add_operator(4, "Z 2")
 
 # Function for prediction
 def qcl_pred(x, U_out):
