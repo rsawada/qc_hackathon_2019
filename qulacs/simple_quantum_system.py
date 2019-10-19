@@ -5,7 +5,7 @@ from qulacs.gate import Y,CNOT,merge,Measurement
 import pickle
 import random
 
-nqubit = 3
+nqubit = 2
 state = QuantumState(nqubit)
 
 n_data = 100
@@ -29,21 +29,21 @@ circuit = QuantumCircuit(nqubit)
 #circuit.add_H_gate(2)
 circuit.add_RX_gate(0, 0.1)
 circuit.add_RX_gate(1, 0.1)
-circuit.add_RX_gate(2, 0.1)
+#circuit.add_RX_gate(2, 0.1)
 merged_gate = merge(CNOT(0,1),Y(1))
 circuit.add_gate(merged_gate)
 meas0 = Measurement(0, 0)
 circuit.add_gate(meas0)
 meas1 = Measurement(1, 1)
 circuit.add_gate(meas1)
-meas2 = Measurement(2, 2)
-circuit.add_gate(meas2)
+#meas2 = Measurement(2, 2)
+#circuit.add_gate(meas2)
 print(circuit)
 
 observable = Observable(nqubit)
 observable.add_operator(1, "Z 0")
 observable.add_operator(2, "Z 1")
-observable.add_operator(4, "Z 2")
+#observable.add_operator(4, "Z 2")
 
 data = list()
 x_value = list()

@@ -13,7 +13,7 @@ from qulacs import Observable
 
 
 ######## Parameters #############
-nqubit = 3 ## number of qubits
+nqubit = 2 ## number of qubits
 c_depth = 3 ## circuit depth
 
 ## Random seed
@@ -53,8 +53,8 @@ meas0 = Measurement(0, 0)
 U_out.add_gate(meas0)
 meas1 = Measurement(1, 1)
 U_out.add_gate(meas1)
-meas2 = Measurement(2, 2)
-U_out.add_gate(meas2)
+#meas2 = Measurement(2, 2)
+#U_out.add_gate(meas2)
 
 # Take the initial theta
 parameter_count = U_out.get_parameter_count()
@@ -87,7 +87,7 @@ def set_U_out(theta):
 obs = Observable(nqubit)
 obs.add_operator(1, "Z 0")
 obs.add_operator(2, "Z 1")
-obs.add_operator(4, "Z 2")
+#obs.add_operator(4, "Z 2")
 
 # Function for prediction
 def qcl_pred(x, U_out):
