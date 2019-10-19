@@ -49,12 +49,12 @@ for d in range(c_depth):
         U_out.add_parametric_RZ_gate(i,angle)
         angle = 2.0 * np.pi * np.random.rand()
         U_out.add_parametric_RX_gate(i,angle)
-    meas0 = Measurement(0, 0)
-    U_out.add_gate(meas0)
-    meas1 = Measurement(1, 1)
-    U_out.add_gate(meas1)
-    meas2 = Measurement(2, 2)
-    U_out.add_gate(meas2)
+meas0 = Measurement(0, 0)
+U_out.add_gate(meas0)
+meas1 = Measurement(1, 1)
+U_out.add_gate(meas1)
+meas2 = Measurement(2, 2)
+U_out.add_gate(meas2)
 
 # Take the initial theta
 parameter_count = U_out.get_parameter_count()
